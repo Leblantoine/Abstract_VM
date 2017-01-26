@@ -6,7 +6,7 @@
 #    By: aleblanc <aleblanc@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2017/01/26 14:13:37 by aleblanc          #+#    #+#              #
-#    Updated: 2017/01/26 14:33:04 by aleblanc         ###   ########.fr        #
+#    Updated: 2017/01/26 15:22:16 by aleblanc         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -17,7 +17,8 @@ FLAGS= -Wall -Werror -Wextra
 INC= -I include
 
 SRC= main.cpp \
-		 Factory.class.cpp
+		 Factory.class.cpp \
+		 Vm.class.cpp
 
 OBJ= $(SRC:%.cpp=obj/%.o)
 
