@@ -6,24 +6,14 @@
 /*   By: aleblanc <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/01/24 10:31:38 by aleblanc          #+#    #+#             */
-/*   Updated: 2017/01/25 16:10:39 by aleblanc         ###   ########.fr       */
+/*   Updated: 2017/01/26 14:32:52 by aleblanc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
-
-
 
 #ifndef IOPERAND_HPP
 #define IOPERAND_HPP
 
-#include <iostream>
-
-  enum    eOperandType {
-    Int8 = 0,
-    Int16 = 1,
-    Int32 = 2,
-    Float = 3,
-    Double = 4
-  };
+#include "abstract.hpp"
 
 class IOperand {
 

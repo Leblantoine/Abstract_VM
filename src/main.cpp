@@ -6,7 +6,7 @@
 /*   By: aleblanc <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/01/25 09:20:15 by aleblanc          #+#    #+#             */
-/*   Updated: 2017/01/25 16:10:33 by aleblanc         ###   ########.fr       */
+/*   Updated: 2017/01/26 14:33:01 by aleblanc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,9 +16,19 @@ int main(void) {
 
   IOperand const *a;
   IOperand const *b;
+  IOperand const *c;
+  IOperand const *d;
   try {
-    a = Operand<int8_t>::Operand().createOperand(Int8, "28");
-    b = Operand<float>::Operand().createOperand(Float, "129382");
+    a = Factory::Factory().createOperand(Int16, "526");
+    b = Factory::Factory().createOperand(Double, "100.1");
+
+    c = *b + *a;
+    std::cout << c->toString() << std::endl;
+    std::cout << c->getType() << std::endl;
+
+    d = *a + *b;
+    std::cout << d->toString() << std::endl;
+    std::cout << d->getType() << std::endl;
   } catch (const std::exception & err) {
     std::cout << "ERROR: " << err.what() << std::endl;
   }

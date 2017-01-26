@@ -6,14 +6,18 @@
 /*   By: aleblanc <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/01/24 10:45:53 by aleblanc          #+#    #+#             */
-/*   Updated: 2017/01/25 16:10:36 by aleblanc         ###   ########.fr       */
+/*   Updated: 2017/01/26 14:32:55 by aleblanc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 
 #ifndef OPERAND_TEMPLATE_HPP
 #define OPERAND_TEMPLATE_HPP
+
 #include "IOperand.hpp"
+#include "Factory.class.hpp"
+#include <math.h>
+
 
 template< typename T >
 class Operand : public IOperand {
@@ -45,6 +49,15 @@ class Operand : public IOperand {
     }
     // Canonical form
 
+    Operand<T>(eOperandType type, std::string const & value) : _type(type), _precision(0) {
+      if (stold(value, NULL) > std::numeric_limits<T>::max())
+        throw OverflowException();
+      else if (stold(value, NULL) < std::numeric_limits<T>::lowest())
+        throw UnderflowException();
+      this->_str = std::to_string(static_cast<T>(stod(value, NULL)));
+      this->_value = static_cast<T>(stod(value, NULL));
+    }
+
     // Getter
     T             getValue(void) const {
       return this->_value;
@@ -65,24 +78,29 @@ class Operand : public IOperand {
 
     // Operator
     IOperand const * operator+( IOperand const & src ) const {
-      (void)src;
-      return this;
+      return Factory::Factory().createOperand((this->_type > src.getType()) ? this->_type : src.getType(),
+          std::to_string(static_cast<double>(stod(this->_str, NULL)) + static_cast<double>(stod(src.toString(), NULL))));
     }
     IOperand const * operator-( IOperand const & src ) const {
-      (void)src;
-      return this;
+      return Factory::Factory().createOperand((this->_type > src.getType()) ? this->_type : src.getType(),
+          std::to_string(static_cast<double>(stod(this->_str, NULL)) - static_cast<double>(stod(src.toString(), NULL))));
     }
+
     IOperand const * operator*( IOperand const & src ) const {
-      (void)src;
-      return this;
+      return Factory::Factory().createOperand((this->_type > src.getType()) ? this->_type : src.getType(),
+          std::to_string(static_cast<double>(stod(this->_str, NULL)) * static_cast<double>(stod(src.toString(), NULL))));
     }
     IOperand const * operator/( IOperand const & src ) const {
-      (void)src;
-      return this;
+      if (static_cast<T>(stod(src.toString(), NULL)) == 0 || this->_value == 0)
+        throw byZeroException();
+      return Factory::Factory().createOperand((this->_type > src.getType()) ? this->_type : src.getType(),
+          std::to_string(static_cast<double>(stod(this->_str, NULL)) / static_cast<double>(stod(src.toString(), NULL))));
     }
     IOperand const * operator%( IOperand const & src ) const {
-      (void)src;
-      return this;
+      if (static_cast<T>(stod(src.toString(), NULL)) == 0 || this->_value == 0)
+        throw byZeroException();
+      return Factory::Factory().createOperand((this->_type > src.getType()) ? this->_type : src.getType(),
+          std::to_string(fmod(static_cast<double>(stod(this->_str, NULL)), static_cast<double>(stod(src.toString(), NULL)))));
     }
     // Operator
 
@@ -104,59 +122,24 @@ class Operand : public IOperand {
         UnderflowException & operator=(UnderflowException const &) { return *this; }
         virtual const char * what() const throw() { return ("Value underflow"); }
     };
+
+    class byZeroException : public std::exception {
+      public:
+        byZeroException(void) { return; }
+        byZeroException(byZeroException const & src) { *this = src; return; }
+        ~byZeroException(void) throw() { return; }
+        byZeroException & operator=(byZeroException const &) { return *this; }
+        virtual const char * what() const throw() { return ("Division / modulo by 0"); }
+    };
     // Exception
 
-    IOperand const * createOperand(eOperandType type, std::string const & value) const {
-      return (this->*_create[type])(value);
-    }
-
   private:
-
-    Operand<T>(eOperandType type, std::string const & value) : _type(type), _precision(0) {
-      if (stold(value, 0) > std::numeric_limits<T>::max())
-        throw Operand::OverflowException();
-      else if (stold(value, 0) < std::numeric_limits<T>::min())
-        throw Operand::UnderflowException();
-      this->_str = std::to_string(static_cast<T>(stod(value, 0)));
-      this->_value = static_cast<T>(stod(value, 0));
-    }
-
-    IOperand const * createInt8( std::string const & value ) const {
-      std::cout << "create new Operand Int8 " << value << std::endl;
-      return new Operand<T>(Int8, value);
-    }
-    IOperand const * createInt16( std::string const & value ) const {
-      std::cout << "create new Operand Int16 " << value << std::endl;
-      return new Operand<T>(Int16, value);
-    }
-    IOperand const * createInt32( std::string const & value ) const{
-      std::cout << "create new Operand Int32 " << value << std::endl;
-      return new Operand<T>(Int32, value);
-    }
-    IOperand const * createFloat( std::string const & value ) const {
-      std::cout << "create new Operand Float " << value << std::endl;
-      return new Operand<T>(Float, value);
-    }
-    IOperand const * createDouble( std::string const & value ) const {
-      std::cout << "create new Operand Double " << value << std::endl;
-      return new Operand<T>(Double, value);
-    }
 
     T             _value;
     eOperandType  _type;
     int           _precision;
     std::string   _str;
 
-    typedef IOperand const * (Operand::*FABRIC[5]) (std::string const & value) const;
-    static FABRIC _create;
 };
 
-template<typename T>
-typename Operand<T>::FABRIC Operand<T>::_create = {
-  &Operand::createInt8,
-  &Operand::createInt16,
-  &Operand::createInt32,
-  &Operand::createFloat,
-  &Operand::createDouble,
-};
 #endif
