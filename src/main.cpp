@@ -6,31 +6,38 @@
 /*   By: aleblanc <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/01/25 09:20:15 by aleblanc          #+#    #+#             */
-/*   Updated: 2017/01/26 15:53:41 by aleblanc         ###   ########.fr       */
+/*   Updated: 2017/01/27 10:55:37 by aleblanc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "Operand.template.hpp"
+#include "Vm.class.hpp"
 #include <fstream>
 
 int main(int argc, char **argv) {
 
-  (void)argc;
-  std::string   line;
-  std::ifstream      myfile(argv[1]);
-  if (myfile.is_open()) {
-    while (getline(myfile,line)) {
-      std::cout << line << std::endl;
-    }
-    myfile.close();
-  }
-
-  IOperand const *a;
-  IOperand const *b;
-  IOperand const *c;
-  IOperand const *d;
   try {
-    a = Factory::Factory().createOperand(Int16, "526");
+    Vm  vm = Vm();
+    (void)argc;
+    if (argc == 2) {
+      std::string       line;
+      std::ifstream     file(argv[1]);
+
+      if (file.is_open()) {
+        while (getline(file, line)) {
+          vm.storeInstruction(line);
+        }
+
+        file.close();
+      }
+
+
+    }
+    IOperand const *a;
+    IOperand const *b;
+    IOperand const *c;
+    IOperand const *d;
+    a = Factory::Factory().createOperand(Int8, "-526");
     b = Factory::Factory().createOperand(Double, "100.1");
 
     c = *b + *a;
@@ -40,7 +47,7 @@ int main(int argc, char **argv) {
     d = *a + *b;
     std::cout << d->toString() << std::endl;
     std::cout << d->getType() << std::endl;
-  } catch (const std::exception & err) {
+  } catch (const Error & err) {
     std::cout << "ERROR: " << err.what() << std::endl;
   }
   return 0;

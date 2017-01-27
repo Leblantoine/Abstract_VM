@@ -6,7 +6,7 @@
 #    By: aleblanc <aleblanc@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2017/01/26 14:13:37 by aleblanc          #+#    #+#              #
-#    Updated: 2017/01/26 15:22:16 by aleblanc         ###   ########.fr        #
+#    Updated: 2017/01/27 10:56:38 by aleblanc         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -18,7 +18,9 @@ INC= -I include
 
 SRC= main.cpp \
 		 Factory.class.cpp \
-		 Vm.class.cpp
+		 Vm.class.cpp \
+		 Instruction.class.cpp \
+		 Error.class.cpp
 
 OBJ= $(SRC:%.cpp=obj/%.o)
 

@@ -6,7 +6,7 @@
 /*   By: aleblanc <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/01/24 10:45:53 by aleblanc          #+#    #+#             */
-/*   Updated: 2017/01/26 14:32:55 by aleblanc         ###   ########.fr       */
+/*   Updated: 2017/01/27 10:56:04 by aleblanc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,7 @@
 
 #include "IOperand.hpp"
 #include "Factory.class.hpp"
+#include "Error.class.hpp"
 #include <math.h>
 
 
@@ -103,35 +104,6 @@ class Operand : public IOperand {
           std::to_string(fmod(static_cast<double>(stod(this->_str, NULL)), static_cast<double>(stod(src.toString(), NULL)))));
     }
     // Operator
-
-    // Exception
-    class OverflowException : public std::exception {
-      public:
-        OverflowException(void) { return; }
-        OverflowException(OverflowException const & src) { *this = src; return; }
-        ~OverflowException(void) throw() { return; }
-        OverflowException & operator=(OverflowException const &) { return *this; }
-        virtual const char * what() const throw() { return ("Value overflow"); }
-    };
-
-    class UnderflowException : public std::exception {
-      public:
-        UnderflowException(void) { return; }
-        UnderflowException(UnderflowException const & src) { *this = src; return; }
-        ~UnderflowException(void) throw() { return; }
-        UnderflowException & operator=(UnderflowException const &) { return *this; }
-        virtual const char * what() const throw() { return ("Value underflow"); }
-    };
-
-    class byZeroException : public std::exception {
-      public:
-        byZeroException(void) { return; }
-        byZeroException(byZeroException const & src) { *this = src; return; }
-        ~byZeroException(void) throw() { return; }
-        byZeroException & operator=(byZeroException const &) { return *this; }
-        virtual const char * what() const throw() { return ("Division / modulo by 0"); }
-    };
-    // Exception
 
   private:
 

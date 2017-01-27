@@ -6,14 +6,16 @@
 /*   By: aleblanc <aleblanc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/01/26 15:11:09 by aleblanc          #+#    #+#             */
-/*   Updated: 2017/01/26 15:21:37 by aleblanc         ###   ########.fr       */
+/*   Updated: 2017/01/27 10:55:58 by aleblanc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef VM_HPP
 #define VM_HPP
 
-#define "IOperand.hpp"
+#include <vector>
+#include "IOperand.hpp"
+#include "Instruction.class.hpp"
 
 class Vm {
 
@@ -21,9 +23,11 @@ class Vm {
     Vm(void);
     ~Vm(void);
     Vm(Vm const & src);
-    Vm &  operator=(Vm consr & src);
+    Vm &  operator=(Vm const & src);
 
-    void  push();
+    void storeInstruction(std::string line);
+
+/*    void  push();
     void  pop();
     void  dump();
     void  assert();
@@ -34,10 +38,11 @@ class Vm {
     void  mod();
     void  print();
     void  exit();
-
+*/
   private:
 
-    std::list<IOperand const *>   _stack;
+    std::vector<IOperand const *>     _stack;
+    std::vector<Instruction const *>  _instruction;
 
 };
 
