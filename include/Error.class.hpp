@@ -6,7 +6,7 @@
 /*   By: aleblanc <aleblanc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/01/27 10:23:35 by aleblanc          #+#    #+#             */
-/*   Updated: 2017/01/27 10:56:30 by aleblanc         ###   ########.fr       */
+/*   Updated: 2017/01/31 14:05:16 by aleblanc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,5 +64,42 @@ class lexicalException : public Error {
     lexicalException & operator=(lexicalException const &);
     virtual const char * what() const throw();
 };
+
+class assertException : public Error {
+  public:
+    assertException(void);
+    assertException(assertException const & src);
+    ~assertException(void) throw();
+    assertException & operator=(assertException const &);
+    virtual const char * what() const throw();
+};
+
+class emptyException : public Error {
+  public:
+    emptyException(void);
+    emptyException(emptyException const & src);
+    ~emptyException(void) throw();
+    emptyException & operator=(emptyException const &);
+    virtual const char * what() const throw();
+};
+
+class toSmallException : public Error {
+  public:
+    toSmallException(void);
+    toSmallException(toSmallException const & src);
+    ~toSmallException(void) throw();
+    toSmallException & operator=(toSmallException const &);
+    virtual const char * what() const throw();
+};
+
+class noPrintableException : public Error {
+  public:
+    noPrintableException(void);
+    noPrintableException(noPrintableException const & src);
+    ~noPrintableException(void) throw();
+    noPrintableException & operator=(noPrintableException const &);
+    virtual const char * what() const throw();
+};
+
 
 #endif

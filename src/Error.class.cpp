@@ -6,7 +6,7 @@
 /*   By: aleblanc <aleblanc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/01/27 10:23:50 by aleblanc          #+#    #+#             */
-/*   Updated: 2017/01/27 10:55:53 by aleblanc         ###   ########.fr       */
+/*   Updated: 2017/01/31 14:06:08 by aleblanc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,3 +46,33 @@ lexicalException::lexicalException(lexicalException const & src) { *this = src; 
 lexicalException::~lexicalException(void) throw() { return; }
 lexicalException &    lexicalException::operator=(lexicalException const &) { return *this; }
 const char *          lexicalException::what() const throw() { return ("Lexical"); }
+
+// assertException
+assertException::assertException(void) { return; }
+assertException::assertException(assertException const & src) { *this = src; return; }
+assertException::~assertException(void) throw() { return; }
+assertException &     assertException::operator=(assertException const &) { return *this; }
+const char *          assertException::what() const throw() { return ("from 'assert' instruction: The values are not the same"); }
+
+// emptyException
+emptyException::emptyException(void) { return; }
+emptyException::emptyException(emptyException const & src) { *this = src; return; }
+emptyException::~emptyException(void) throw() { return; }
+emptyException &      emptyException::operator=(emptyException const &) { return *this; }
+const char *          emptyException::what() const throw() { return ("from 'pop' instruction: Empty stack"); }
+
+// toSmallException
+toSmallException::toSmallException(void) { return; }
+toSmallException::toSmallException(toSmallException const & src) { *this = src; return; }
+toSmallException::~toSmallException(void) throw() { return; }
+toSmallException &    toSmallException::operator=(toSmallException const &) { return *this; }
+const char *          toSmallException::what() const throw() { return ("Not enought object in the stack"); }
+
+// noPrintableException
+noPrintableException::noPrintableException(void) { return; }
+noPrintableException::noPrintableException(noPrintableException const & src) { *this = src; return; }
+noPrintableException::~noPrintableException(void) throw() { return; }
+noPrintableException & noPrintableException::operator=(noPrintableException const &) { return *this; }
+const char *          noPrintableException::what() const throw() { return ("Object in top of the stack is not a Int8 type"); }
+
+

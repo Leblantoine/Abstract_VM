@@ -6,7 +6,7 @@
 /*   By: aleblanc <aleblanc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/01/27 08:41:05 by aleblanc          #+#    #+#             */
-/*   Updated: 2017/01/31 08:51:30 by aleblanc         ###   ########.fr       */
+/*   Updated: 2017/01/31 14:06:13 by aleblanc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,14 +33,14 @@ Instruction & Instruction::operator=(Instruction const &) {
 // Canonical form
 
 Instruction::Instruction(std::string line) : _type(Nop) {
-  if (line == "pop" || line == "dump" || line== "add" ||
-      line == "sub" || line == "mul" || line == "div" ||
-      line == "mod" || line == "print" || line == "exit")
-    this->_action = line;
-  else if (line.at(0) == ';') {}
+  std::cout << line << std::endl;
+  if (std::regex_match(line, std::regex("^(pop|dump|add|sub|mul|div|mod|print|exit)( *;.*)?$")))
+    this->_action = line.substr(0, (line.find(' ') < line.find(';') ? line.find(' ') : line.find(';')));
+  else if (line.at(0) == ';')
+    this->_action = "comment";
   else if (!std::regex_match(line, std::regex("(.*)(push|assert)(.*)")))
     throw unknowException();
-  else if (std::regex_match(line, std::regex("^(push|assert) (((int8|int16|int32)[(]-?[0-9]+[)])|((float|double)[(]-?[0-9]+(.?[0-9]+)?[)]))$")))
+  else if (std::regex_match(line, std::regex("^(push|assert) (((int8|int16|int32)[(]-?[0-9]+[)])|((float|double)[(]-?[0-9]+(.?[0-9]+)?[)]))( *;.*)?$")))
     storeInstruction(line);
   else
     throw lexicalException();
@@ -57,11 +57,11 @@ void    Instruction::storeInstruction(std::string line) {
     this->_type = Int32;
   else if (line.find("float") != std::string::npos)
     this->_type = Float;
-  else
+  else if (line.find("double") != std::string::npos)
     this->_type = Double;
 
-  this->_action = line.substr(0, line.find(' '));
-  this->_value = line.substr(line.find('(') + 1, line.find(')') - line.find('(') - 1);
+this->_action = line.substr(0, line.find(' '));
+this->_value = line.substr(line.find('(') + 1, line.find(')') - line.find('(') - 1);
 }
 
 // Getter
