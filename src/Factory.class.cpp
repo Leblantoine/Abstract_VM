@@ -6,7 +6,7 @@
 /*   By: aleblanc <aleblanc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/01/26 09:52:32 by aleblanc          #+#    #+#             */
-/*   Updated: 2017/01/26 14:32:58 by aleblanc         ###   ########.fr       */
+/*   Updated: 2017/01/31 16:23:18 by aleblanc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,23 +45,18 @@ IOperand const * Factory::createOperand(eOperandType type, std::string const & v
 }
 
 IOperand const * Factory::createInt8( std::string const & value ) const {
-  std::cout << "create new Operand Int8 " << value << std::endl;
   return new Operand<int8_t>(Int8, value);
 }
 IOperand const * Factory::createInt16( std::string const & value ) const {
-  std::cout << "create new Operand Int16 " << value << std::endl;
   return new Operand<int16_t>(Int16, value);
 }
 IOperand const * Factory::createInt32( std::string const & value ) const{
-  std::cout << "create new Operand Int32 " << value << std::endl;
   return new Operand<int32_t>(Int32, value);
 }
 IOperand const * Factory::createFloat( std::string const & value ) const {
-  std::cout << "create new Operand Float " << value << std::endl;
   return new Operand<float>(Float, value);
 }
 IOperand const * Factory::createDouble( std::string const & value ) const {
-  std::cout << "create new Operand Double " << value << std::endl;
   return new Operand<double>(Double, value);
 }
 

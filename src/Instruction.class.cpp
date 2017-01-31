@@ -6,7 +6,7 @@
 /*   By: aleblanc <aleblanc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/01/27 08:41:05 by aleblanc          #+#    #+#             */
-/*   Updated: 2017/01/31 14:06:13 by aleblanc         ###   ########.fr       */
+/*   Updated: 2017/01/31 16:23:27 by aleblanc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,8 +33,9 @@ Instruction & Instruction::operator=(Instruction const &) {
 // Canonical form
 
 Instruction::Instruction(std::string line) : _type(Nop) {
-  std::cout << line << std::endl;
-  if (std::regex_match(line, std::regex("^(pop|dump|add|sub|mul|div|mod|print|exit)( *;.*)?$")))
+  if (line.empty())
+    throw emptyLineException();
+  else if (std::regex_match(line, std::regex("^(pop|dump|add|sub|mul|div|mod|print|exit)( *;.*)?$")))
     this->_action = line.substr(0, (line.find(' ') < line.find(';') ? line.find(' ') : line.find(';')));
   else if (line.at(0) == ';')
     this->_action = "comment";

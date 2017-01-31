@@ -6,7 +6,7 @@
 /*   By: aleblanc <aleblanc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/01/27 10:23:35 by aleblanc          #+#    #+#             */
-/*   Updated: 2017/01/31 14:05:16 by aleblanc         ###   ########.fr       */
+/*   Updated: 2017/01/31 16:22:48 by aleblanc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,12 +74,12 @@ class assertException : public Error {
     virtual const char * what() const throw();
 };
 
-class emptyException : public Error {
+class emptyStackException : public Error {
   public:
-    emptyException(void);
-    emptyException(emptyException const & src);
-    ~emptyException(void) throw();
-    emptyException & operator=(emptyException const &);
+    emptyStackException(void);
+    emptyStackException(emptyStackException const & src);
+    ~emptyStackException(void) throw();
+    emptyStackException & operator=(emptyStackException const &);
     virtual const char * what() const throw();
 };
 
@@ -101,5 +101,22 @@ class noPrintableException : public Error {
     virtual const char * what() const throw();
 };
 
+class noExitException : public Error {
+  public:
+    noExitException(void);
+    noExitException(noExitException const & src);
+    ~noExitException(void) throw();
+    noExitException & operator=(noExitException const &);
+    virtual const char * what() const throw();
+};
+
+class emptyLineException : public Error {
+  public:
+    emptyLineException(void);
+    emptyLineException(emptyLineException const & src);
+    ~emptyLineException(void) throw();
+    emptyLineException & operator=(emptyLineException const &);
+    virtual const char * what() const throw();
+};
 
 #endif

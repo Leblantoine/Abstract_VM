@@ -6,7 +6,7 @@
 /*   By: aleblanc <aleblanc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/01/27 10:23:50 by aleblanc          #+#    #+#             */
-/*   Updated: 2017/01/31 14:06:08 by aleblanc         ###   ########.fr       */
+/*   Updated: 2017/01/31 16:23:08 by aleblanc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,14 +52,14 @@ assertException::assertException(void) { return; }
 assertException::assertException(assertException const & src) { *this = src; return; }
 assertException::~assertException(void) throw() { return; }
 assertException &     assertException::operator=(assertException const &) { return *this; }
-const char *          assertException::what() const throw() { return ("from 'assert' instruction: The values are not the same"); }
+const char *          assertException::what() const throw() { return ("The values are not the same"); }
 
-// emptyException
-emptyException::emptyException(void) { return; }
-emptyException::emptyException(emptyException const & src) { *this = src; return; }
-emptyException::~emptyException(void) throw() { return; }
-emptyException &      emptyException::operator=(emptyException const &) { return *this; }
-const char *          emptyException::what() const throw() { return ("from 'pop' instruction: Empty stack"); }
+// emptyStackException
+emptyStackException::emptyStackException(void) { return; }
+emptyStackException::emptyStackException(emptyStackException const & src) { *this = src; return; }
+emptyStackException::~emptyStackException(void) throw() { return; }
+emptyStackException & emptyStackException::operator=(emptyStackException const &) { return *this; }
+const char *          emptyStackException::what() const throw() { return ("Empty stack"); }
 
 // toSmallException
 toSmallException::toSmallException(void) { return; }
@@ -73,6 +73,20 @@ noPrintableException::noPrintableException(void) { return; }
 noPrintableException::noPrintableException(noPrintableException const & src) { *this = src; return; }
 noPrintableException::~noPrintableException(void) throw() { return; }
 noPrintableException & noPrintableException::operator=(noPrintableException const &) { return *this; }
-const char *          noPrintableException::what() const throw() { return ("Object in top of the stack is not a Int8 type"); }
+const char *           noPrintableException::what() const throw() { return ("Object in top of the stack is not a Int8 type"); }
+
+// noExitException
+noExitException::noExitException(void) { return; }
+noExitException::noExitException(noExitException const & src) { *this = src; return; }
+noExitException::~noExitException(void) throw() { return; }
+noExitException &     noExitException::operator=(noExitException const &) { return *this; }
+const char *          noExitException::what() const throw() { return ("No exit instruction found"); }
+
+// emptyLineException
+emptyLineException::emptyLineException(void) { return; }
+emptyLineException::emptyLineException(emptyLineException const & src) { *this = src; return; }
+emptyLineException::~emptyLineException(void) throw() { return; }
+emptyLineException &  emptyLineException::operator=(emptyLineException const &) { return *this; }
+const char *          emptyLineException::what() const throw() { return ("Empty line"); }
 
 

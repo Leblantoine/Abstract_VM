@@ -6,14 +6,14 @@
 /*   By: aleblanc <aleblanc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/01/26 15:11:25 by aleblanc          #+#    #+#             */
-/*   Updated: 2017/01/31 14:06:21 by aleblanc         ###   ########.fr       */
+/*   Updated: 2017/01/31 16:25:05 by aleblanc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "Vm.class.hpp"
 
 // Canonical form
-Vm::Vm(void) {
+Vm::Vm(void) : _exit(false) {
   this->_map["pop"] = &Vm::pop;
   this->_map["dump"] = &Vm::dump;
   this->_map["add"] = &Vm::add;
@@ -22,7 +22,6 @@ Vm::Vm(void) {
   this->_map["div"] = &Vm::div;
   this->_map["mod"] = &Vm::mod;
   this->_map["print"] = &Vm::print;
-  this->_map["exit"] = &Vm::exit;
   return;
 }
 
@@ -59,41 +58,41 @@ void    Vm::executeInstruction(void) {
     else if (this->_instruction.at(i)->getAction() == "assert")
       Vm::assert(this->_instruction.at(i));
     else if (this->_instruction.at(i)->getAction() == "comment") {}
+    else if (this->_instruction.at(i)->getAction() == "exit")
+      break;
     else
       (this->*_map[this->_instruction.at(i)->getAction()])();
   }
 }
 
 void    Vm::push(Instruction const * src) {
-  std::cout << "In PUSH" << std::endl;
   this->_stack.push_back(Factory::Factory().createOperand(src->getType(), src->getValue()));
 }
 
 void    Vm::assert(Instruction const * src) {
-  std::cout << "In ASSERT" << std::endl;
-  if (src->getType() != this->_stack.back()->getType()
+  if (this->_stack.size() == 0)
+    throw emptyStackException();
+  else if (src->getType() != this->_stack.back()->getType()
       || std::to_string(static_cast<double>(stod(src->getValue(), NULL))) != this->_stack.back()->toString())
     throw assertException();
 }
 
 void    Vm::pop(void) {
-  std::cout << "In POP" << std::endl;
   if (this->_stack.size() != 0)
     this->_stack.pop_back();
   else
-    throw emptyException();
+    throw emptyStackException();
 }
 
 void    Vm::dump(void) {
-  std::cout << "In DUMP" << std::endl;
-  for (int i = this->_stack.size() - 1 ; i >= 0 ; i--) {
-    // THIS IS NECESSARY TO PUT OUT STRING IN A VARIABLE ???
-    std::cout << this->_stack.at(i)->toString() << std::endl;
+  if (this->_stack.size() > 0) {
+    for (int i = this->_stack.size() - 1 ; i >= 0 ; i--) {
+      std::cout << this->_stack.at(i)->toString() << std::endl;
+    }
   }
 }
 
 void    Vm::add(void) {
-  std::cout << "In ADD" << std::endl;
   if (this->_stack.size() >= 2) {
     IOperand const * i = this->_stack.rbegin()[0];
     IOperand const * j = this->_stack.rbegin()[1];
@@ -106,7 +105,6 @@ void    Vm::add(void) {
 }
 
 void    Vm::sub(void) {
-  std::cout << "In SUB" << std::endl;
   if (this->_stack.size() >= 2) {
     IOperand const * i = this->_stack.rbegin()[0];
     IOperand const * j = this->_stack.rbegin()[1];
@@ -119,7 +117,6 @@ void    Vm::sub(void) {
 }
 
 void    Vm::mul(void) {
-  std::cout << "In MUL" << std::endl;
   if (this->_stack.size() >= 2) {
     IOperand const * i = this->_stack.rbegin()[0];
     IOperand const * j = this->_stack.rbegin()[1];
@@ -132,7 +129,6 @@ void    Vm::mul(void) {
 }
 
 void    Vm::div(void) {
-  std::cout << "In DIV" << std::endl;
   if (this->_stack.size() >= 2) {
     IOperand const * i = this->_stack.rbegin()[0];
     IOperand const * j = this->_stack.rbegin()[1];
@@ -145,7 +141,6 @@ void    Vm::div(void) {
 }
 
 void    Vm::mod(void) {
-  std::cout << "In MOD" << std::endl;
   if (this->_stack.size() >= 2) {
     IOperand const * i = this->_stack.rbegin()[0];
     IOperand const * j = this->_stack.rbegin()[1];
@@ -158,15 +153,11 @@ void    Vm::mod(void) {
 }
 
 void    Vm::print(void) {
-  std::cout << "In PRINT" << std::endl;
-  if (this->_stack.back()->getType() == Int8)
-    std::cout <<  "Int8" << std::endl;
+  if (this->_stack.back()->getType() == Int8) {
+    std::cout <<  static_cast<int8_t>(stod(this->_stack.back()->toString())) << std::endl;
+  }
   else
     throw noPrintableException();
-}
-
-void    Vm::exit(void) {
-  std::cout << "In EXIT" << std::endl;
 }
 
 // Getter

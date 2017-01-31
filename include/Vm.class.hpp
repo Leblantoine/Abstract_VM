@@ -6,7 +6,7 @@
 /*   By: aleblanc <aleblanc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/01/26 15:11:09 by aleblanc          #+#    #+#             */
-/*   Updated: 2017/01/31 14:05:59 by aleblanc         ###   ########.fr       */
+/*   Updated: 2017/01/31 16:23:03 by aleblanc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,7 +46,6 @@ class Vm {
     void  div(void);
     void  mod(void);
     void  print(void);
-    void  exit(void);
 
   private:
 
