@@ -6,7 +6,7 @@
 /*   By: aleblanc <aleblanc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/01/27 08:40:51 by aleblanc          #+#    #+#             */
-/*   Updated: 2017/01/27 10:56:19 by aleblanc         ###   ########.fr       */
+/*   Updated: 2017/01/31 07:41:03 by aleblanc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,6 +32,7 @@ class Instruction {
 
   private:
 
+    void          storeInstruction(std::string line);
     std::string   _action;
     eOperandType  _type;
     std::string   _value;

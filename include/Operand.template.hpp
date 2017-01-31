@@ -6,7 +6,7 @@
 /*   By: aleblanc <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/01/24 10:45:53 by aleblanc          #+#    #+#             */
-/*   Updated: 2017/01/27 10:56:04 by aleblanc         ###   ########.fr       */
+/*   Updated: 2017/01/31 08:34:11 by aleblanc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,10 +41,10 @@ class Operand : public IOperand {
 
     Operand<T> &  operator=(Operand<T> const & src) {
       if (this != &src) {
-        this->_value = src.getValue;
-        this->_type = src.getType;
-        this->_precision = src.getPrecision;
-        this->_str = src.toString;
+        this->_value = src.getValue();
+        this->_type = src.getType();
+        this->_precision = src.getPrecision();
+        this->_str = src.toString();
       }
       return *this;
     }
