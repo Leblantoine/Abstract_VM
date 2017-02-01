@@ -1,0 +1,3 @@
+push double(2938.09)
+assert double(1)
+exit

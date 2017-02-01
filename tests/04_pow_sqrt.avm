@@ -1,0 +1,9 @@
+push int16(42)
+push int32(2)
+dump
+pow ; 42^2
+dump
+sqrt ; sqrt of 42^2
+dump
+pop ; I clean
+exit

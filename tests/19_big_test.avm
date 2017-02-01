@@ -1,0 +1,70 @@
+; -------------------------- ;
+; With same types            ;
+; -------------------------- ;
+push int8(28)
+push int8(8)
+sub
+assert int8(20)
+pop
+push int16(32)
+push int16(10)
+add
+assert int16(42)
+pop
+push int32(1001)
+push int32(2)
+mul
+assert int32(2002)
+pop
+push float(20.5)
+push float(1.6)
+mul
+assert float(32.8)
+pop
+push double(28.93748312)
+push double(0.93748312)
+sub
+assert double(28)
+pop
+; -------------------------- ;
+; With different types       ;
+; -------------------------- ;
+push int8(28)
+push float(8.2)
+sub
+assert float(19.8)
+pop
+push int16(32)
+push double(2.00001)
+add
+assert double(34.00001)
+pop
+push int32(1001)
+push int8(2)
+mul
+assert int32(2002)
+pop
+push float(20.5)
+push int32(8)
+mul
+assert float(164)
+pop
+push float(28.93748312)
+push double(0.93748312)
+sub
+assert double(28)
+pop
+; -------------------------- ;
+; Works great !              ;
+; -------------------------- ;
+push int8(87) ; W
+print
+push int8(111) ; o
+print
+push int8(114) ; r
+print
+push int8(107) ; k
+print
+push int8(115) ; s
+print
+exit

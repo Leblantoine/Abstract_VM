@@ -1,0 +1,7 @@
+push double(1.6)
+push int8(0)
+dump
+;mod
+div
+dump
+exit

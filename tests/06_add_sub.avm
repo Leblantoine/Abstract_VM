@@ -1,0 +1,9 @@
+push int32(3794202)
+dump
+push double(202.402)
+sub
+dump
+push double(1)
+add
+dump
+exit

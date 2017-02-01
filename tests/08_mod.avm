@@ -1,0 +1,6 @@
+push float(26.9)
+push double(6.1)
+dump
+mod
+dump
+exit

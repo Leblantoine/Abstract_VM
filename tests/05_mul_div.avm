@@ -1,0 +1,11 @@
+push double(42.41)
+dump
+push int8(2)
+mul
+assert double(84.82)
+dump
+push int8(2)
+div
+assert double(42.41)
+dump
+exit
