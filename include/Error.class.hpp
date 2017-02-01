@@ -6,7 +6,7 @@
 /*   By: aleblanc <aleblanc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/01/27 10:23:35 by aleblanc          #+#    #+#             */
-/*   Updated: 2017/01/31 16:22:48 by aleblanc         ###   ########.fr       */
+/*   Updated: 2017/02/01 12:41:46 by aleblanc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -116,6 +116,15 @@ class emptyLineException : public Error {
     emptyLineException(emptyLineException const & src);
     ~emptyLineException(void) throw();
     emptyLineException & operator=(emptyLineException const &);
+    virtual const char * what() const throw();
+};
+
+class noValidFileException : public Error {
+  public:
+    noValidFileException(void);
+    noValidFileException(noValidFileException const & src);
+    ~noValidFileException(void) throw();
+    noValidFileException & operator=(noValidFileException const &);
     virtual const char * what() const throw();
 };
 

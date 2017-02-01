@@ -6,7 +6,7 @@
 /*   By: aleblanc <aleblanc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/01/27 10:23:50 by aleblanc          #+#    #+#             */
-/*   Updated: 2017/01/31 16:23:08 by aleblanc         ###   ########.fr       */
+/*   Updated: 2017/02/01 12:42:40 by aleblanc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,4 +89,9 @@ emptyLineException::~emptyLineException(void) throw() { return; }
 emptyLineException &  emptyLineException::operator=(emptyLineException const &) { return *this; }
 const char *          emptyLineException::what() const throw() { return ("Empty line"); }
 
-
+// noValidFileException
+noValidFileException::noValidFileException(void) { return; }
+noValidFileException::noValidFileException(noValidFileException const & src) { *this = src; return; }
+noValidFileException::~noValidFileException(void) throw() { return; }
+noValidFileException & noValidFileException::operator=(noValidFileException const &) { return *this; }
+const char *           noValidFileException::what() const throw() { return ("The file does not exist"); }

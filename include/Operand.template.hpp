@@ -6,7 +6,7 @@
 /*   By: aleblanc <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/01/24 10:45:53 by aleblanc          #+#    #+#             */
-/*   Updated: 2017/01/31 08:34:11 by aleblanc         ###   ########.fr       */
+/*   Updated: 2017/02/01 12:42:06 by aleblanc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,13 +92,13 @@ class Operand : public IOperand {
           std::to_string(static_cast<double>(stod(this->_str, NULL)) * static_cast<double>(stod(src.toString(), NULL))));
     }
     IOperand const * operator/( IOperand const & src ) const {
-      if (static_cast<T>(stod(src.toString(), NULL)) == 0 || this->_value == 0)
+      if (static_cast<T>(stod(src.toString(), NULL)) == 0)
         throw byZeroException();
       return Factory::Factory().createOperand((this->_type > src.getType()) ? this->_type : src.getType(),
           std::to_string(static_cast<double>(stod(this->_str, NULL)) / static_cast<double>(stod(src.toString(), NULL))));
     }
     IOperand const * operator%( IOperand const & src ) const {
-      if (static_cast<T>(stod(src.toString(), NULL)) == 0 || this->_value == 0)
+      if (static_cast<T>(stod(src.toString(), NULL)) == 0)
         throw byZeroException();
       return Factory::Factory().createOperand((this->_type > src.getType()) ? this->_type : src.getType(),
           std::to_string(fmod(static_cast<double>(stod(this->_str, NULL)), static_cast<double>(stod(src.toString(), NULL)))));
