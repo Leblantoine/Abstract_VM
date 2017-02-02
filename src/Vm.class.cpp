@@ -6,7 +6,7 @@
 /*   By: aleblanc <aleblanc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/01/26 15:11:25 by aleblanc          #+#    #+#             */
-/*   Updated: 2017/02/01 12:43:35 by aleblanc         ###   ########.fr       */
+/*   Updated: 2017/02/02 13:58:58 by aleblanc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,6 +33,14 @@ Vm::Vm(void) : _exit(false), _line(0) {
 }
 
 Vm::~Vm(void) {
+  while (this->_stack.size() != 0) {
+    delete this->_stack.back();
+    this->_stack.pop_back();
+  }
+  while (this->_instruction.size() != 0) {
+    delete this->_instruction.back();
+    this->_instruction.pop_back();
+  }
   return;
 }
 
@@ -84,16 +92,20 @@ void    Vm::push(Instruction const * src) {
 }
 
 void    Vm::assert(Instruction const * src) {
+
+  IOperand const * i = Factory::Factory().createOperand(src->getType(), src->getValue());
+
   if (this->_stack.size() == 0)
     throw emptyStackException();
-  else if (src->getType() != this->_stack.back()->getType()
-      || std::to_string(static_cast<double>(stod(src->getValue(), NULL))) != this->_stack.back()->toString())
+  else if (i->getType() != this->_stack.back()->getType() || i->toString() != this->_stack.back()->toString())
     throw assertException();
 }
 
 void    Vm::pop(void) {
-  if (this->_stack.size() != 0)
+  if (this->_stack.size() != 0) {
+    delete this->_stack.back();
     this->_stack.pop_back();
+  }
   else
     throw emptyStackException();
 }
@@ -113,6 +125,8 @@ void    Vm::add(void) {
     this->_stack.pop_back();
     this->_stack.pop_back();
     this->_stack.push_back(*i + *j);
+    delete i;
+    delete j;
   }
   else
     throw toSmallException();
@@ -125,6 +139,8 @@ void    Vm::sub(void) {
     this->_stack.pop_back();
     this->_stack.pop_back();
     this->_stack.push_back(*j - *i);
+    delete i;
+    delete j;
   }
   else
     throw toSmallException();
@@ -137,6 +153,8 @@ void    Vm::mul(void) {
     this->_stack.pop_back();
     this->_stack.pop_back();
     this->_stack.push_back(*i * *j);
+    delete i;
+    delete j;
   }
   else
     throw toSmallException();
@@ -149,6 +167,8 @@ void    Vm::div(void) {
     this->_stack.pop_back();
     this->_stack.pop_back();
     this->_stack.push_back(*j / *i);
+    delete i;
+    delete j;
   }
   else
     throw toSmallException();
@@ -161,6 +181,8 @@ void    Vm::mod(void) {
     this->_stack.pop_back();
     this->_stack.pop_back();
     this->_stack.push_back(*j % *i);
+    delete i;
+    delete j;
   }
   else
     throw toSmallException();
@@ -180,6 +202,7 @@ void    Vm::cos(void) {
     IOperand const * i = this->_stack.rbegin()[0];
     this->_stack.pop_back();
     this->_stack.push_back(Factory::Factory().createOperand(i->getType(), std::to_string(std::cos(stod(i->toString())))));
+    delete i;
   }
   else
     throw emptyStackException();
@@ -190,6 +213,7 @@ void    Vm::sin(void) {
     IOperand const * i = this->_stack.rbegin()[0];
     this->_stack.pop_back();
     this->_stack.push_back(Factory::Factory().createOperand(i->getType(), std::to_string(std::sin(stod(i->toString())))));
+    delete i;
   }
   else
     throw emptyStackException();
@@ -200,6 +224,7 @@ void    Vm::tan(void) {
     IOperand const * i = this->_stack.rbegin()[0];
     this->_stack.pop_back();
     this->_stack.push_back(Factory::Factory().createOperand(i->getType(), std::to_string(std::tan(stod(i->toString())))));
+    delete i;
   }
   else
     throw emptyStackException();
@@ -210,6 +235,7 @@ void    Vm::sqrt(void) {
     IOperand const * i = this->_stack.rbegin()[0];
     this->_stack.pop_back();
     this->_stack.push_back(Factory::Factory().createOperand(i->getType(), std::to_string(std::sqrt(stod(i->toString())))));
+    delete i;
   }
   else
     throw emptyStackException();
@@ -223,6 +249,8 @@ void    Vm::pow(void) {
     this->_stack.pop_back();
     this->_stack.push_back(Factory::Factory().createOperand((i->getType() > j->getType()) ? i->getType() : j->getType(),
           std::to_string(std::pow(stod(j->toString()), stod(i->toString())))));
+    delete i;
+    delete j;
   }
   else
     throw toSmallException();
