@@ -6,7 +6,7 @@
 /*   By: aleblanc <aleblanc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/01/27 08:41:05 by aleblanc          #+#    #+#             */
-/*   Updated: 2017/02/01 12:42:54 by aleblanc         ###   ########.fr       */
+/*   Updated: 2017/02/07 12:56:58 by aleblanc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,19 +32,19 @@ Instruction & Instruction::operator=(Instruction const &) {
 }
 // Canonical form
 
-Instruction::Instruction(std::string line) : _type(Nop) {
+Instruction::Instruction(std::string line) : _type(Nop), _error("") {
   if (line.empty())
-    throw emptyLineException();
+    this->_error = "Empty line";
   else if (std::regex_match(line, std::regex("^(pop|dump|add|sub|mul|div|mod|print|exit|cos|sin|tan|sqrt|pow)( *;.*)?$")))
     this->_action = line.substr(0, (line.find(' ') < line.find(';') ? line.find(' ') : line.find(';')));
   else if (line.at(0) == ';')
     this->_action = "comment";
   else if (!std::regex_match(line, std::regex("(.*)(push|assert)(.*)")))
-    throw unknowException();
+    this->_error = "Unknow instruction";
   else if (std::regex_match(line, std::regex("^(push|assert) (((int8|int16|int32)[(]-?[0-9]+[)])|((float|double)[(]-?[0-9]+(.?[0-9]+)?[)]))( *;.*)?$")))
     storeInstruction(line);
   else
-    throw lexicalException();
+    this->_error = "Lexical";
   return;
 }
 
@@ -76,5 +76,9 @@ eOperandType    Instruction::getType(void) const {
 
 std::string     Instruction::getValue(void) const {
   return this->_value;
+}
+
+std::string     Instruction::getError(void) const {
+  return this->_error;
 }
 // Getter

@@ -6,14 +6,14 @@
 /*   By: aleblanc <aleblanc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/01/26 15:11:25 by aleblanc          #+#    #+#             */
-/*   Updated: 2017/02/02 13:58:58 by aleblanc         ###   ########.fr       */
+/*   Updated: 2017/02/07 13:33:05 by aleblanc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "Vm.class.hpp"
 
 // Canonical form
-Vm::Vm(void) : _exit(false), _line(0) {
+Vm::Vm(void) : _exit(false), _line(0), _errors("") {
   this->_map["pop"] = &Vm::pop;
   this->_map["dump"] = &Vm::dump;
   this->_map["add"] = &Vm::add;
@@ -56,6 +56,7 @@ Vm & Vm::operator=(Vm const & src) {
     this->_exit = src.getExit();
     this->_cout = src.getCout();
     this->_line = src.getLine();
+    this->_errors << src.getErrors();
   }
   return *this;
 }
@@ -64,13 +65,23 @@ Vm & Vm::operator=(Vm const & src) {
 void    Vm::storeInstruction(std::string line) {
   this->_line += 1;
   this->_instruction.push_back(new Instruction::Instruction(line));
-  if (this->_instruction.back()->getAction() == "exit") {
+  if (this->_instruction.back()->getAction() == "exit")
     this->_exit = true;
+  if (this->_instruction.back()->getError() != "") {
+    this->_errors << std::endl << "Line " << this->_line << ", ERROR: " << this->_instruction.back()->getError();
   }
+}
+
+void    Vm::checkErrors(void) {
+  if (this->_exit == false)
+    this->_errors << std::endl << "ERROR: No exit instruction found";
+  if (this->_errors.str() != "")
+    throw fileException(this->_errors.str());
 }
 
 void    Vm::executeInstruction(void) {
   this->_line = 0;
+  try {
   for (unsigned int i = 0; i < this->_instruction.size(); i++) {
     this->_line += 1;
     if (this->_instruction.at(i)->getAction() == "push")
@@ -85,6 +96,9 @@ void    Vm::executeInstruction(void) {
     else
       (this->*_map[this->_instruction.at(i)->getAction()])();
   }
+  } catch (const std::exception & err) {
+    throw execException(err.what(), this->_line);
+  }
 }
 
 void    Vm::push(Instruction const * src) {
@@ -96,9 +110,11 @@ void    Vm::assert(Instruction const * src) {
   IOperand const * i = Factory::Factory().createOperand(src->getType(), src->getValue());
 
   if (this->_stack.size() == 0)
-    throw emptyStackException();
-  else if (i->getType() != this->_stack.back()->getType() || i->toString() != this->_stack.back()->toString())
-    throw assertException();
+    throw execException("from assert, Empty stack");
+  else if (i->getType() != this->_stack.back()->getType())
+    throw execException("from assert, Type are not the same");
+  else if (i->toString() != this->_stack.back()->toString())
+    throw execException("from assert, Values are not the same");
 }
 
 void    Vm::pop(void) {
@@ -107,7 +123,7 @@ void    Vm::pop(void) {
     this->_stack.pop_back();
   }
   else
-    throw emptyStackException();
+    throw execException("from pop, Empty stack");
 }
 
 void    Vm::dump(void) {
@@ -129,7 +145,7 @@ void    Vm::add(void) {
     delete j;
   }
   else
-    throw toSmallException();
+    throw execException("from add, Not enought object in the stack");
 }
 
 void    Vm::sub(void) {
@@ -143,7 +159,7 @@ void    Vm::sub(void) {
     delete j;
   }
   else
-    throw toSmallException();
+    throw execException("from sub, Not enought object in the stack");
 }
 
 void    Vm::mul(void) {
@@ -157,7 +173,7 @@ void    Vm::mul(void) {
     delete j;
   }
   else
-    throw toSmallException();
+    throw execException("from mul, Not enought object in the stack");
 }
 
 void    Vm::div(void) {
@@ -171,7 +187,7 @@ void    Vm::div(void) {
     delete j;
   }
   else
-    throw toSmallException();
+    throw execException("from div, Not enought object in the stack");
 }
 
 void    Vm::mod(void) {
@@ -185,7 +201,7 @@ void    Vm::mod(void) {
     delete j;
   }
   else
-    throw toSmallException();
+    throw execException("from mod, Not enought object in the stack");
 }
 
 void    Vm::print(void) {
@@ -194,7 +210,7 @@ void    Vm::print(void) {
     this->_cout = this->_cout + ch + "\n";
   }
   else
-    throw noPrintableException();
+    throw execException("from print, Object in the top of the stack is not a Int8 type");
 }
 
 void    Vm::cos(void) {
@@ -205,7 +221,7 @@ void    Vm::cos(void) {
     delete i;
   }
   else
-    throw emptyStackException();
+    throw execException("from cos, Empty stack");
 }
 
 void    Vm::sin(void) {
@@ -216,7 +232,7 @@ void    Vm::sin(void) {
     delete i;
   }
   else
-    throw emptyStackException();
+    throw execException("from sin, Empty stack");
 }
 
 void    Vm::tan(void) {
@@ -227,7 +243,7 @@ void    Vm::tan(void) {
     delete i;
   }
   else
-    throw emptyStackException();
+    throw execException("from tan, Empty stack");
 }
 
 void    Vm::sqrt(void) {
@@ -238,7 +254,7 @@ void    Vm::sqrt(void) {
     delete i;
   }
   else
-    throw emptyStackException();
+    throw execException("from sqrt, Empty stack");
 }
 
 void    Vm::pow(void) {
@@ -253,7 +269,7 @@ void    Vm::pow(void) {
     delete j;
   }
   else
-    throw toSmallException();
+    throw execException("from pow, Not enought object in the stack");
 }
 
 // Getter
@@ -275,5 +291,9 @@ std::string                       Vm::getCout(void) const {
 
 unsigned int                      Vm::getLine(void) const {
   return this->_line;
+}
+
+std::string                       Vm::getErrors(void) const {
+  return this->_errors.str();
 }
 // Getter

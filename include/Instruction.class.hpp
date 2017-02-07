@@ -6,7 +6,7 @@
 /*   By: aleblanc <aleblanc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/01/27 08:40:51 by aleblanc          #+#    #+#             */
-/*   Updated: 2017/01/31 07:41:03 by aleblanc         ###   ########.fr       */
+/*   Updated: 2017/02/07 13:05:32 by aleblanc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,6 +29,7 @@ class Instruction {
     std::string   getAction(void) const;
     eOperandType  getType(void) const;
     std::string   getValue(void) const;
+    std::string   getError(void) const;
 
   private:
 
@@ -36,6 +37,7 @@ class Instruction {
     std::string   _action;
     eOperandType  _type;
     std::string   _value;
+    std::string   _error;
 
 };
 

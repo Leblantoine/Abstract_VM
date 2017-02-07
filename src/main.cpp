@@ -6,7 +6,7 @@
 /*   By: aleblanc <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/01/25 09:20:15 by aleblanc          #+#    #+#             */
-/*   Updated: 2017/02/01 12:43:20 by aleblanc         ###   ########.fr       */
+/*   Updated: 2017/02/07 12:57:02 by aleblanc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,14 +30,15 @@ int main(int argc, char **argv) {
       while (getline(std::cin, line) && line != ";;")
         vm.storeInstruction(line);
     else
-      throw noValidFileException();
+      throw fileException("ERROR: File is not valid");
 
-    if (vm.getExit())
+    if ((argc == 1 && line == ";;") || argc == 2){
+      vm.checkErrors();
       vm.executeInstruction();
-    else
-      throw noExitException();
-  } catch (const Error & err) {
-    std::cout <<"Line: " << vm.getLine() << " ERROR: " << err.what() << std::endl;
+    } else
+      throw fileException("ERROR: Should terminate by `;;`");
+  } catch (const std::exception & err) {
+    std::cout << err.what() << std::endl;
   }
   return 0;
 }

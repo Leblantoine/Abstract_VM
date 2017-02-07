@@ -6,7 +6,7 @@
 /*   By: aleblanc <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/01/24 10:45:53 by aleblanc          #+#    #+#             */
-/*   Updated: 2017/02/01 12:42:06 by aleblanc         ###   ########.fr       */
+/*   Updated: 2017/02/07 12:56:42 by aleblanc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,9 +52,9 @@ class Operand : public IOperand {
 
     Operand<T>(eOperandType type, std::string const & value) : _type(type), _precision(0) {
       if (stold(value, NULL) > std::numeric_limits<T>::max())
-        throw OverflowException();
+        throw execException("Overflow");
       else if (stold(value, NULL) < std::numeric_limits<T>::lowest())
-        throw UnderflowException();
+        throw execException("Underflow");
       this->_str = std::to_string(static_cast<T>(stod(value, NULL)));
       this->_value = static_cast<T>(stod(value, NULL));
     }
@@ -93,13 +93,13 @@ class Operand : public IOperand {
     }
     IOperand const * operator/( IOperand const & src ) const {
       if (static_cast<T>(stod(src.toString(), NULL)) == 0)
-        throw byZeroException();
+        throw execException("Division by zero");
       return Factory::Factory().createOperand((this->_type > src.getType()) ? this->_type : src.getType(),
           std::to_string(static_cast<double>(stod(this->_str, NULL)) / static_cast<double>(stod(src.toString(), NULL))));
     }
     IOperand const * operator%( IOperand const & src ) const {
       if (static_cast<T>(stod(src.toString(), NULL)) == 0)
-        throw byZeroException();
+        throw execException("Modulo by zero");
       return Factory::Factory().createOperand((this->_type > src.getType()) ? this->_type : src.getType(),
           std::to_string(fmod(static_cast<double>(stod(this->_str, NULL)), static_cast<double>(stod(src.toString(), NULL)))));
     }

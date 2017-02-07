@@ -6,7 +6,7 @@
 /*   By: aleblanc <aleblanc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/01/26 15:11:09 by aleblanc          #+#    #+#             */
-/*   Updated: 2017/02/01 12:42:21 by aleblanc         ###   ########.fr       */
+/*   Updated: 2017/02/07 12:56:48 by aleblanc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,7 @@
 #include <vector>
 #include <map>
 #include <cmath>
+#include <sstream>
 #include "IOperand.hpp"
 #include "Operand.template.hpp"
 #include "Instruction.class.hpp"
@@ -32,12 +33,14 @@ class Vm {
 
     void    storeInstruction(std::string line);
     void    executeInstruction(void);
+    void    checkErrors(void);
 
     std::vector<IOperand const *>     getStack(void) const;
     std::vector<Instruction const *>  getInstruction(void) const;
     bool                              getExit(void) const;
     std::string                       getCout(void) const;
     unsigned int                      getLine(void) const;
+    std::string                       getErrors(void) const;
 
     void  push(Instruction const * src);
     void  pop(void);
@@ -63,6 +66,7 @@ class Vm {
     bool                              _exit;
     std::string                       _cout;
     unsigned int                      _line;
+    std::stringstream                 _errors;
 
     typedef       void (Vm::*ACTION)(void);
     typedef       std::map<std::string, ACTION> actionMap;
