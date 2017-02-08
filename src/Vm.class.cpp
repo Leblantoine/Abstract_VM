@@ -6,7 +6,7 @@
 /*   By: aleblanc <aleblanc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/01/26 15:11:25 by aleblanc          #+#    #+#             */
-/*   Updated: 2017/02/07 13:33:05 by aleblanc         ###   ########.fr       */
+/*   Updated: 2017/02/08 11:28:13 by aleblanc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,6 @@ Vm::Vm(void) : _exit(false), _line(0), _errors("") {
   this->_map["div"] = &Vm::div;
   this->_map["mod"] = &Vm::mod;
   this->_map["print"] = &Vm::print;
-  this->_map["exit"] = &Vm::print;
   // Bonus
   this->_map["sin"] = &Vm::sin;
   this->_map["cos"] = &Vm::cos;
@@ -205,12 +204,16 @@ void    Vm::mod(void) {
 }
 
 void    Vm::print(void) {
-  if (this->_stack.back()->getType() == Int8) {
-    char ch = static_cast<int8_t>(stod(this->_stack.back()->toString()));
-    this->_cout = this->_cout + ch + "\n";
+  if (this->_stack.size() >= 1) {
+    if (this->_stack.back()->getType() == Int8) {
+      char ch = static_cast<int8_t>(stod(this->_stack.back()->toString()));
+      this->_cout = this->_cout + ch + "\n";
+    }
+    else
+      throw execException("from print, Object in the top of the stack is not a Int8 type");
   }
   else
-    throw execException("from print, Object in the top of the stack is not a Int8 type");
+    throw execException("from print, Empty stack");
 }
 
 void    Vm::cos(void) {

@@ -6,7 +6,7 @@
 /*   By: aleblanc <aleblanc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/01/27 08:41:05 by aleblanc          #+#    #+#             */
-/*   Updated: 2017/02/07 12:56:58 by aleblanc         ###   ########.fr       */
+/*   Updated: 2017/02/08 11:28:01 by aleblanc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,18 +33,24 @@ Instruction & Instruction::operator=(Instruction const &) {
 // Canonical form
 
 Instruction::Instruction(std::string line) : _type(Nop), _error("") {
+  char * str = new char[line.size() + 1];
+  std::copy(line.begin(), line.end(), str);
+  str[line.size()] = '\0';
+
   if (line.empty())
     this->_error = "Empty line";
-  else if (std::regex_match(line, std::regex("^(pop|dump|add|sub|mul|div|mod|print|exit|cos|sin|tan|sqrt|pow)( *;.*)?$")))
-    this->_action = line.substr(0, (line.find(' ') < line.find(';') ? line.find(' ') : line.find(';')));
-  else if (line.at(0) == ';')
+  else if (std::regex_match(line, std::regex("^(\\s*)?;(.*)$")))
     this->_action = "comment";
+  else if (std::regex_match(line, std::regex("^(\\s*)?(pop|dump|add|sub|mul|div|mod|print|exit|cos|sin|tan|sqrt|pow)(\\s*)?(;.*)?$")))
+    this->_action = std::strtok(str, " \t;");
   else if (!std::regex_match(line, std::regex("(.*)(push|assert)(.*)")))
     this->_error = "Unknow instruction";
-  else if (std::regex_match(line, std::regex("^(push|assert) (((int8|int16|int32)[(]-?[0-9]+[)])|((float|double)[(]-?[0-9]+(.?[0-9]+)?[)]))( *;.*)?$")))
-    storeInstruction(line);
+  else if (std::regex_match(line, std::regex("^(\\s*)?(push|assert)(\\s+)(((int8|int16|int32)[(]-?[0-9]+[)])|((float|double)[(]-?[0-9]+(.?[0-9]+)?[)]))(\\s*)(;.*)?$")))
+    storeInstruction(str);
   else
     this->_error = "Lexical";
+
+  delete [] str;
   return;
 }
 
@@ -61,8 +67,14 @@ void    Instruction::storeInstruction(std::string line) {
   else if (line.find("double") != std::string::npos)
     this->_type = Double;
 
-this->_action = line.substr(0, line.find(' '));
-this->_value = line.substr(line.find('(') + 1, line.find(')') - line.find('(') - 1);
+  char * str = new char[line.size() + 1];
+  std::copy(line.begin(), line.end(), str);
+  str[line.size()] = '\0';
+
+  this->_action = std::strtok(str, " \t");
+  this->_value = line.substr(line.find('(') + 1, line.find(')') - line.find('(') - 1);
+
+  delete [] str;
 }
 
 // Getter
