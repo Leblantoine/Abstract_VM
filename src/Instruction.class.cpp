@@ -6,7 +6,7 @@
 /*   By: aleblanc <aleblanc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/01/27 08:41:05 by aleblanc          #+#    #+#             */
-/*   Updated: 2017/02/08 11:28:01 by aleblanc         ###   ########.fr       */
+/*   Updated: 2017/02/15 09:20:35 by aleblanc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,16 +55,17 @@ Instruction::Instruction(std::string line) : _type(Nop), _error("") {
 }
 
 void    Instruction::storeInstruction(std::string line) {
+  size_t pos = line.find("(");
 
-  if (line.find("int8") != std::string::npos)
+  if (line.find("int8") != std::string::npos && line.find("int8") < pos)
     this->_type = Int8;
-  else if (line.find("int16") != std::string::npos)
+  else if (line.find("int16") != std::string::npos && line.find("int16") < pos)
     this->_type = Int16;
-  else if (line.find("int32") != std::string::npos)
+  else if (line.find("int32") != std::string::npos && line.find("int32") < pos)
     this->_type = Int32;
-  else if (line.find("float") != std::string::npos)
+  else if (line.find("float") != std::string::npos && line.find("float") < pos)
     this->_type = Float;
-  else if (line.find("double") != std::string::npos)
+  else if (line.find("double") != std::string::npos && line.find("double") < pos)
     this->_type = Double;
 
   char * str = new char[line.size() + 1];
